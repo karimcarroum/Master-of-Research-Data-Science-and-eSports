@@ -59,7 +59,8 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
                     for actfun2 in actfun:
                         for actfun_last in actfun:
                             
-                            folds_scores = []
+                            folds_scores_out_of_sample = []
+                            folds_scores_in_sample = []
                             summary_values = []
                             for train_index, test_index in KFold(folds).split(train_x):
                                 cv_train_x, cv_test_x = train_x.iloc[train_index], train_x.iloc[test_index]
@@ -67,14 +68,17 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
                                 model = create_model(inputs=inputs, hu1=hui, hu2=huj, hu_last=huk, actfun1=actfun1, actfun2=actfun2,
                                                      actfun_last=actfun_last, optimizer=optimizer, metric=metric, loss=loss)
                                 model.fit(cv_train_x, cv_train_y, epochs=epochs, batch_size=batch_size)
-                                folds_scores.append(model.evaluate(cv_test_x,cv_test_y))
+                                folds_scores_out_of_sample.append(model.evaluate(cv_test_x,cv_test_y))
+                                folds_scores_in_sample.append(model.evaluate(cv_train_x,cv_train_y))
                             count = count + 1
                             print(count, iterations / folds)
-                            temporal_mean = np.mean(folds_scores)
-                            cv_mae.append(temporal_mean)
+                            temporal_mean_out_of_sample = np.mean(folds_scores_out_of_sample)
+                            temporal_mean_in_sample = np.mean(folds_scores_in_sample)
+                            cv_mae.append(temporal_mean_out_of_sample)
                             
                             #Fill the summary dictionary
-                            summary_values.append(temporal_mean)
+                            summary_values.append(temporal_mean_out_of_sample)
+                            summary_values.append(temporal_mean_in_sample)
                             summary_values.append(hui)
                             summary_values.append(huj)
                             summary_values.append(huk)
@@ -94,23 +98,23 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
 actfun = ["sigmoid", "tanh", "linear"]  # Activation functions
 inputs = train.shape[1] - 1             # Number of training variables
-hu1 = 4                                 # 1st hidden layer's maximum units
-hu2 = 2                                 # 2nd hidden layer's maximum units
+hu1 = 8                                 # 1st hidden layer's maximum units
+hu2 = 6                                 # 2nd hidden layer's maximum units
 hu_last = 1                             # Hidden units in output layer --> 1 for regression, more for classification
-optimizer = "adam"                      # "adam", "rmsprop", "sgd"
-metric = [metrics.mae]                  # Performance metric
-loss = losses.mean_absolute_error       # Performance metric
+optimizer = "rmsprop"                   # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
+metric = [metrics.mae]                  # Epoch's performance metric
+loss = losses.mean_absolute_error       # Loss function epoch's score
 folds = 2
 epochs = 20
-batch_size = 50
+batch_size = train.shape[0]             # Reduce it to reasonable levels to improve the generalisation of the models, but runtime increases
 
 # Results
 
 np.random.seed(1)
 cv_neural_net = neural_network_reg_cv(train_x=train_x, train_y=train_y, inputs=inputs, hu1=hu1, hu2=hu2, hu_last=hu_last, actfun=actfun, metric=metric,
                       loss=loss, optimizer=optimizer, folds=folds, epochs=epochs, batch_size=batch_size)
-print(cv_neural_net[0])
+print(cv_neural_net[0], cv_neural_net[2])
 
 results = pd.DataFrame.from_dict(cv_neural_net[3])
-compression_opts = dict(method='zip', archive_name='out.csv')
-results.to_csv('out.zip', index=False, compression=compression_opts)
+compression_opts = dict(method='zip', archive_name='results.csv')
+results.to_csv('results.zip', index=False, compression=compression_opts)
