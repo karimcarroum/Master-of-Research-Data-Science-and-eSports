@@ -94,8 +94,8 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
 actfun = ["sigmoid", "tanh", "linear"]  # Activation functions
 inputs = train.shape[1] - 1             # Number of training variables
-hu1 = 1                                 # 1st hidden layer's maximum units
-hu2 = 1                                 # 2nd hidden layer's maximum units
+hu1 = 4                                 # 1st hidden layer's maximum units
+hu2 = 2                                 # 2nd hidden layer's maximum units
 hu_last = 1                             # Hidden units in output layer --> 1 for regression, more for classification
 optimizer = "adam"                      # "adam", "rmsprop", "sgd"
 metric = [metrics.mae]                  # Performance metric
@@ -109,7 +109,8 @@ batch_size = 50
 np.random.seed(1)
 cv_neural_net = neural_network_reg_cv(train_x=train_x, train_y=train_y, inputs=inputs, hu1=hu1, hu2=hu2, hu_last=hu_last, actfun=actfun, metric=metric,
                       loss=loss, optimizer=optimizer, folds=folds, epochs=epochs, batch_size=batch_size)
-print(cv_neural_net[[0,2]])
+print(cv_neural_net[0])
 
-results = pd.DataFrame.from_dict(cv_neural_net[3], columns = ["mae", "hidunits1", "hidunits2", "hidunits_last", "actfun1", "actfun2", "actfun_last"])
-results.to_csv(r'~', index = False, header=True)
+results = pd.DataFrame.from_dict(cv_neural_net[3])
+compression_opts = dict(method='zip', archive_name='out.csv')
+results.to_csv('out.zip', index=False, compression=compression_opts)
