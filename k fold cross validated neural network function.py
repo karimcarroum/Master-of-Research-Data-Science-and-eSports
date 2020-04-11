@@ -17,7 +17,7 @@ from datetime import datetime
 
 # Import train set
 
-train = pd.read_csv("sselected.csv")
+train = pd.read_csv("sselected.csv")        # Sample the train dataset to ensure "randomness"
 train = train.iloc[:,1:train.shape[1]]
 train_x = train.iloc[:,1:train.shape[1]]
 train_y = train.iloc[:,0]
