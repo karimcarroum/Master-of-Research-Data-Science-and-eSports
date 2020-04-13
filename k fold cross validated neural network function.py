@@ -199,7 +199,7 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
 actfun = ["sigmoid", "tanh", "linear"]  # Activation functions
 inputs = train.shape[1] - 1             # Number of training variables
-hu1 = 10                                 # 1st hidden layer's maximum units
+hu1 = 10                                # 1st hidden layer's maximum units
 hu2 = 5                                 # 2nd hidden layer's maximum units
 hu_last = 1                             # Hidden units in output layer --> 1 for regression, more for classification
 optimizer = "rmsprop"                   # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
@@ -207,8 +207,8 @@ metric = [metrics.mae]                  # Epoch's performance metric
 loss = losses.mean_absolute_error       # Loss function epoch's score
 folds = 2                               # Number of folds for the cross-validation
 epochs = 20                             # Starting weights close to linerity, so lower amount of epochs implies activation fcts closer to linearity
-batch_size = train.shape[0]             # Reduce it to reasonable levels to improve the generalisation of the models, but runtime increases multiplicatively
-multistarts = 2                        # TODO (check what happens if set to 1 or 0); Set to False if no multistarts are desired. Best multistart is choosen, not the average
+batch_size = 64                         # Reduce it to reasonable levels to improve the generalisation of the models, but runtime increases multiplicatively
+multistarts = 2                         # Set to False, 0 or 1 if no multistarts are desired. Best multistart is choosen, not the average
 multistarts_info = True                 # Set to true to output mae's out and in sample for each multistart, even if they are not the optimal for their corresponding iteration
                                         # Can be used to calculate mae as an average of multistarts instead than as a min
 # Results
