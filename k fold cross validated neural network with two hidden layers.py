@@ -1,4 +1,4 @@
-### Neural Network with CV
+### Neural Network with CV (Two Hidden Layers)
 ### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
 
 import pandas as pd
