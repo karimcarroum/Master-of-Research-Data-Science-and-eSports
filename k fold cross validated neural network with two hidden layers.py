@@ -185,32 +185,8 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
 
     #Export to csv in current directory
-    colnames = []
-    
-    if multistarts and multistarts_info:
-        for start in range(1, multistarts + 1):
-            colnames.append("mae_out_{}".format(start))
-            colnames.append("mae_in_{}".format(start))
-            colnames.append("hu1_{}".format(start))
-            colnames.append("hu2_{}".format(start))
-            colnames.append("hu_last_{}".format(start))
-            colnames.append("actfun1_{}".format(start))
-            colnames.append("actfun2_{}".format(start))
-            colnames.append("actfun_last_{}".format(start))
-              
-    else:
-        colnames.append("mae_out")
-        colnames.append("mae_in")
-        colnames.append("hu1")
-        colnames.append("hu2")
-        colnames.append("hu_last")
-        colnames.append("actfun1")
-        colnames.append("actfun2")
-        colnames.append("actfun_last")
-    
     results = pd.DataFrame.from_dict(summary)
-    results = results.T # results = pd.DataFrame.transpose(results, copy = True)
-    results.to_csv('results.csv', header = colnames)
+    results.to_csv('results.csv')
     
     end_time = datetime.now()
     total_time = end_time - start_time
