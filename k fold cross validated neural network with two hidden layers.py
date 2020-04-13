@@ -3,6 +3,7 @@
 
 import pandas as pd
 import numpy as np
+import csv
 
 import tensorflow as tf
 from tensorflow import keras
@@ -18,8 +19,8 @@ from datetime import datetime
 # Import train set
 
 train = pd.read_csv("sselected.csv")        # Sample the train dataset to ensure "randomness"
-train = train.iloc[:,1:train.shape[1]]
-train_x = train.iloc[:,1:train.shape[1]]
+train = train.iloc[:,1:(train.shape[1]+1)]
+train_x = train.iloc[:,1:(train.shape[1]+1)]
 train_y = train.iloc[:,0]
 
 
@@ -109,11 +110,7 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
     
                                     summary[key] = summary_values
                                     key = key + 1
-                                    print(key, iterations / folds)
-                            
-            end_time = datetime.now()
-            total_time = end_time - start_time
-            return summary, total_time    
+                                    print(key, iterations / folds)    
         
         # If we do not want information for each multistart, just the optimal models
         else:
@@ -155,11 +152,7 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
     
                                     summary[key] = summary_values
                                     key = key + 1
-                                    print(key, iterations / folds)
-                            
-            end_time = datetime.now()
-            total_time = end_time - start_time
-            return summary, total_time 
+                                    print(key, iterations / folds) 
     
     # Without multistarts
     else:
@@ -190,34 +183,60 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
                                 key = key + 1
                                 print(key, iterations / folds)
 
-        end_time = datetime.now()
-        total_time = end_time - start_time
-        return summary, total_time
+
+    #Export to csv in current directory
+    colnames = []
+    
+    if multistarts and multistarts_info:
+        for start in range(1, multistarts + 1):
+            colnames.append("mae_out_{}".format(start))
+            colnames.append("mae_in_{}".format(start))
+            colnames.append("hu1_{}".format(start))
+            colnames.append("hu2_{}".format(start))
+            colnames.append("hu_last_{}".format(start))
+            colnames.append("actfun1_{}".format(start))
+            colnames.append("actfun2_{}".format(start))
+            colnames.append("actfun_last_{}".format(start))
+              
+    else:
+        colnames.append("mae_out")
+        colnames.append("mae_in")
+        colnames.append("hu1")
+        colnames.append("hu2")
+        colnames.append("hu_last")
+        colnames.append("actfun1")
+        colnames.append("actfun2")
+        colnames.append("actfun_last")
+    
+    results = pd.DataFrame.from_dict(summary)
+    results = results.T # results = pd.DataFrame.transpose(results, copy = True)
+    results.to_csv('results.csv', header = colnames)
+    
+    end_time = datetime.now()
+    total_time = end_time - start_time
+    return summary, total_time
                 
 
 # Model's hyperparameters // Model with 2 hidden layers, regression
 
 actfun = ["sigmoid", "tanh", "linear"]  # Activation functions
 inputs = train.shape[1] - 1             # Number of training variables
-hu1 = 10                                # 1st hidden layer's maximum units
-hu2 = 5                                 # 2nd hidden layer's maximum units
+hu1 = 1                                 # 1st hidden layer's maximum units
+hu2 = 1                                 # 2nd hidden layer's maximum units
 hu_last = 1                             # Hidden units in output layer --> 1 for regression, more for classification
-optimizer = "rmsprop"                   # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
+optimizer = "adam"                      # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
 metric = [metrics.mae]                  # Epoch's performance metric
 loss = losses.mean_absolute_error       # Loss function epoch's score
 folds = 2                               # Number of folds for the cross-validation
 epochs = 20                             # Starting weights close to linerity, so lower amount of epochs implies activation fcts closer to linearity
-batch_size = 64                         # Reduce it to reasonable levels to improve the generalisation of the models, but runtime increases multiplicatively
+batch_size = 20                         # Reduce it to reasonable levels to improve the generalisation of the models, but runtime increases multiplicatively
 multistarts = 2                         # Set to False, 0 or 1 if no multistarts are desired. Best multistart is choosen, not the average
 multistarts_info = True                 # Set to true to output mae's out and in sample for each multistart, even if they are not the optimal for their corresponding iteration
                                         # Can be used to calculate mae as an average of multistarts instead than as a min
+
+
 # Results
 
-np.random.seed(1)
 cv_nn = neural_network_reg_cv(train_x=train_x, train_y=train_y, inputs=inputs, hu1=hu1, hu2=hu2, hu_last=hu_last, actfun=actfun, metric=metric,
                       loss=loss, optimizer=optimizer, folds=folds, epochs=epochs, batch_size=batch_size, multistarts=multistarts, multistarts_info=multistarts_info)
-print("Your computer has been suffering for the last", cv_nn[1])
-
-results = pd.DataFrame.from_dict(cv_nn[0])
-compression_opts = dict(method='zip', archive_name='results.csv')
-results.to_csv('results.zip', index=False, compression=compression_opts)
+print("Running time: ", cv_nn[1])
