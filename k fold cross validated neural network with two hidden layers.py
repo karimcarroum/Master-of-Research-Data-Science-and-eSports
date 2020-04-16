@@ -1,5 +1,8 @@
-### Neural Network with CV (Two Hidden Layers)
+### Neural Network with Cross-Validation (Two Hidden Layers)
 ### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
+
+### Dataset of League of Legends Season 9 Professional e-Sports Players' Statistics
+
 
 import pandas as pd
 import numpy as np
@@ -34,6 +37,9 @@ def create_model(inputs, hu1, hu2, hu_last, actfun1, actfun2, actfun_last, optim
     model.compile(loss=loss, optimizer=optimizer, metrics=metric)                                           
     return model
 
+
+# Cross-Validation by activation functions and hidden units
+
 def cross_val(train_x, train_y, folds, epochs, batch_size, hu1, hu2, hu_last, actfun1, actfun2, actfun_last, optimizer, metric, loss):
     
     #Statistics
@@ -52,7 +58,6 @@ def cross_val(train_x, train_y, folds, epochs, batch_size, hu1, hu2, hu_last, ac
 
     return np.mean(folds_scores_out_of_sample), np.mean(folds_scores_in_sample)
 
-# CV by activation functions and hidden units
 
 def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, metric, loss, optimizer, folds, epochs = 20, batch_size = 20,
                           multistarts = False, multistarts_info = False):
@@ -186,7 +191,7 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
     #Export to csv in current directory
     results = pd.DataFrame.from_dict(summary)
-    results.to_csv('results.csv')
+    results.to_csv('results.csv')       # Csv needs to be transposed
     
     end_time = datetime.now()
     total_time = end_time - start_time
@@ -197,10 +202,10 @@ def neural_network_reg_cv(train_x, train_y, inputs, hu1, hu2, hu_last, actfun, m
 
 actfun = ["sigmoid", "tanh", "linear"]  # Activation functions
 inputs = train.shape[1] - 1             # Number of training variables
-hu1 = 1                                 # 1st hidden layer's maximum units
-hu2 = 1                                 # 2nd hidden layer's maximum units
+hu1 = 12                                # 1st hidden layer's maximum units
+hu2 = 6                                 # 2nd hidden layer's maximum units
 hu_last = 1                             # Hidden units in output layer --> 1 for regression, more for classification
-optimizer = "adam"                      # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
+optimizer = "rmsprop"                   # "adam", "rmsprop", "nadam", "sgd", "adagrad", "adadelta" --> rmsprop faster, adam yields higher accuracy
 metric = [metrics.mae]                  # Epoch's performance metric
 loss = losses.mean_absolute_error       # Loss function epoch's score
 folds = 2                               # Number of folds for the cross-validation
