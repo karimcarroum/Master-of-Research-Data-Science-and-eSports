@@ -10,6 +10,6 @@ Supervised database of League of Legends professional players' statistics for se
     
     - Features: per-game performance statistics.
 
-An earlier project made by me for the subject Advanced Topics in Data Science, on Predicting Win Rates in Professional e-Sports via Supervised Learning (LASSO, Random Forests and Bayesian Model Averaging) can be found at:
+Find also an earlier project made by me for the subject Advanced Topics in Data Science, on Predicting Win Rates in Professional e-Sports via Supervised Learning (LASSO, Random Forests and Bayesian Model Averaging), in PDF format.
 
-https://drive.google.com/open?id=1MfxVr8IKhiUXCJ9hQJR1A3eIWSJpxzxE
+Mail : karim.carroum01@estudiant.upf.edu
