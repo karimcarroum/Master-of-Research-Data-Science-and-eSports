@@ -1,6 +1,6 @@
 # Pompeu Fabra University - Master of Research - Thesis
 
-##### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
+###### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
 
 Ongoing portfolio of software developed for my master's thesis using data science techniques.
 
