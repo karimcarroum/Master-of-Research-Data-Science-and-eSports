@@ -12,4 +12,4 @@ Supervised database of League of Legends professional players' statistics for se
     
     - Features: standardized per-game performance statistics, such as KDA, vision control scores and farm/gold differential at fifteen minutes.
 
-Find also an earlier project made by me for the course "Advanced Topics in Data Science", on Predicting Win Rates in Professional e-Sports via Supervised Learning (LASSO, Random Forests and Bayesian Model Averaging), in PDF format.
+Find also in this directory an earlier project made by me for the course "Advanced Topics in Data Science", on Predicting Win Rates in Professional e-Sports via Supervised Learning (LASSO, Random Forests and Bayesian Model Averaging), in PDF format.
