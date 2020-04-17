@@ -1,4 +1,4 @@
-### Neural Network with Cross-Validation (Two Hidden Layers)
+### Neural Network with Cross-Validation of Activation Functions and Hidden Units (Two Hidden Layers)
 ### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
 
 ### Dataset of League of Legends Season 9 Professional e-Sports Players' Statistics
