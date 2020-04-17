@@ -10,6 +10,6 @@ Supervised database of League of Legends professional players' statistics for se
 
     - Supervisor: win percentage.
     
-    - Features: per-game performance statistics.
+    - Features: per-game performance statistics, such as KDA, vision control scores and farm differential at fifteen minutes.
 
 Find also an earlier project made by me for the subject Advanced Topics in Data Science, on Predicting Win Rates in Professional e-Sports via Supervised Learning (LASSO, Random Forests and Bayesian Model Averaging), in PDF format.
