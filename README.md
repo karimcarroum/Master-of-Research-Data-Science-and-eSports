@@ -2,7 +2,7 @@
 
 ###### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
 
-Ongoing portfolio of software developed for my master's thesis using data science techniques. $\alpha$
+Ongoing portfolio of software developed for my master's thesis using data science techniques.
 
 Date of presentation of the thesis: June 2020.
 
