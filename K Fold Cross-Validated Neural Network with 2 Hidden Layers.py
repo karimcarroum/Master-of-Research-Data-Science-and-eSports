@@ -19,7 +19,7 @@ from sklearn.model_selection import KFold
 from datetime import datetime
 
 
-# Import train set
+# Import dataset. Note: here I call it train, but later this dataset is splitted into train and test datasets.
 
 train = pd.read_csv("sselected.csv")        # Sample the train dataset to ensure "randomness"
 train = train.iloc[:,1:(train.shape[1]+1)]
