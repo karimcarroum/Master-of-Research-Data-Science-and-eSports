@@ -1,7 +1,7 @@
 ### Extending the Dataset to Include Interactions and Second Order Polynomial Terms
 ### Karim Carroum Sanz - karim.carroum01@estudiant.upf.edu
 
-### Note: higher order interactions and/or terms can be introduced, but for the analysed features it is not useful.
+### Note: higher order interactions and/or polynomial terms than these can be introduced, but for the analysed features it is not useful.
 
 import pandas as pd
 
